@@ -1,4 +1,4 @@
-﻿namespace FSharp.ProjectTemplate
+namespace NullKill
 
 // Documentation for my library
 //

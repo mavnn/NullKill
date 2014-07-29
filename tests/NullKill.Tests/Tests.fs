@@ -1,6 +1,6 @@
-﻿module FSharp.ProjectScaffold.Tests
+module NullKill.Tests
 
-open FSharp.ProjectTemplate
+open NullKill
 open NUnit.Framework
 
 [<Test>]

@@ -16,7 +16,7 @@ let info =
     "project-author", "Michael Newton (mavnn)"
     "project-summary", "Check some common sources of nulls"
     "project-github", githubLink
-    "project-nuget", "http://nuget.com/packages/NullKill" ]
+    "project-nuget", "https://nuget.com/packages/NullKill" ]
 
 // --------------------------------------------------------------------------------------
 // For typical project, no changes are needed below

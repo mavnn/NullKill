@@ -4,7 +4,7 @@
 #I "../../bin"
 
 (**
-F# Project Scaffold
+NullKill
 ===================
 
 Documentation
@@ -13,8 +13,8 @@ Documentation
   <div class="span1"></div>
   <div class="span6">
     <div class="well well-small" id="nuget">
-      The F# ProjectTemplate library can be <a href="https://nuget.org/packages/FSharp.ProjectTemplate">installed from NuGet</a>:
-      <pre>PM> Install-Package FSharp.ProjectTemplate</pre>
+      NullKill can be <a href="https://nuget.org/packages/NullKill">installed from NuGet</a>:
+      <pre>PM> Install-Package NullKill</pre>
     </div>
   </div>
   <div class="span1"></div>
@@ -23,30 +23,45 @@ Documentation
 Example
 -------
 
-This example demonstrates using a function defined in this sample library.
+This example usage of NullKill:
 
 *)
-#r "FSharp.ProjectTemplate.dll"
-open FSharp.ProjectTemplate
+#r "NullKill.dll"
+open NullKill
 
-printfn "hello = %i" <| Library.hello 0
+let myThing = System.DateTime.Now
+
+match Check myThing with
+| Some thing ->
+    "myThing is not null, and neither are any of it's fields or properties."
+| None ->
+    "This will never get called."
+
+let nastyThing = null
+
+if HasNoNulls nastyThing then
+    "This would be nice, but..."
+else
+    "nastyThing is null, so you'll run this path."
+
+type NoGoodClass () =
+    [<DefaultValue>] val mutable Field : System.DateTime
+    member val Prop1 = null with get, set
+
+match Check <| NoGoodClass () with
+| Some ngc ->
+    "Won't get here, as there are nasty nulls lurking."
+| None ->
+    "We'll get this instead."
+
+match Check <| NoGoodClass(Field = System.DateTime.Now, Prop1 = "Hello world") with
+| Some ngc ->
+    "All set up this time."
+| None ->
+    "We only have to worry about nulls on this route."
 
 (**
-Some more info
 
-Samples & documentation
------------------------
-
-The library comes with comprehensible documentation. 
-It can include a tutorials automatically generated from `*.fsx` files in [the content folder][content]. 
-The API reference is automatically generated from Markdown comments in the library implementation.
-
- * [Tutorial](tutorial.html) contains a further explanation of this sample library.
-
- * [API Reference](reference/index.html) contains automatically generated documentation for all types, modules
-   and functions in the library. This includes additional brief samples on using most of the
-   functions.
- 
 Contributing and copyright
 --------------------------
 
@@ -59,9 +74,9 @@ The library is available under Public Domain license, which allows modification 
 redistribution for both commercial and non-commercial purposes. For more information see the 
 [License file][license] in the GitHub repository. 
 
-  [content]: https://github.com/fsprojects/FSharp.ProjectScaffold/tree/master/docs/content
-  [gh]: https://github.com/fsprojects/FSharp.ProjectScaffold
-  [issues]: https://github.com/fsprojects/FSharp.ProjectScaffold/issues
-  [readme]: https://github.com/fsprojects/FSharp.ProjectScaffold/blob/master/README.md
-  [license]: https://github.com/fsprojects/FSharp.ProjectScaffold/blob/master/LICENSE.txt
+  [content]: https://github.com/mavnn/NullKill/tree/master/docs/content
+  [gh]: https://github.com/mavnn/NullKill
+  [issues]: https://github.com/mavnn/NullKill/issues
+  [readme]: https://github.com/mavnn/NullKill/blob/master/README.md
+  [license]: https://github.com/mavnn/NullKill/blob/master/LICENSE.txt
 *)

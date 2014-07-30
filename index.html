@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>NullKill
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Check some common sources of nulls"/>
+    <meta name="author" content="Michael Newton (mavnn)"/>
+
+    <script src="https://code.jquery.com/jquery-1.8.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.8.23/jquery-ui.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
+    <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet"/>
+
+    <link type="text/css" rel="stylesheet" href="/NullKill/content/style.css" />
+    <script type="text/javascript" src="/NullKill/content/tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li><a href="http://fsharp.org">fsharp.org</a></li>
+          <li><a href="http://github.com/mavnn/NullKill">github page</a></li>
+        </ul>
+        <h3 class="muted"><a href="/NullKill/index.html">NullKill</a></h3>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="span9" id="main">
+          
+<h1>NullKill</h1>
+
+<p>Documentation</p>
+
+<div class="row">
+  <div class="span1"></div>
+  <div class="span6">
+    <div class="well well-small" id="nuget">
+      NullKill can be <a href="https://nuget.org/packages/NullKill">installed from NuGet</a>:
+      <pre>PM> Install-Package NullKill</pre>
+    </div>
+  </div>
+  <div class="span1"></div>
+</div>
+
+<h2>Example</h2>
+
+<p>This example usage of NullKill:</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+<span class="l">31: </span>
+<span class="l">32: </span>
+<span class="l">33: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="prep">#r</span> <span class="s">&quot;</span><span class="s">NullKill</span><span class="s">.</span><span class="s">dll</span><span class="s">&quot;</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">NullKill</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">myThing</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="i">DateTime</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="i">Now</span>
+
+<span class="k">match</span> <span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="i">Check</span> <span onmouseout="hideTip(event, 'fs2', 7)" onmouseover="showTip(event, 'fs2', 7)" class="i">myThing</span> <span class="k">with</span>
+| <span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="i">Some</span> <span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="i">thing</span> <span class="k">-&gt;</span>
+    <span class="s">&quot;</span><span class="s">myThing</span><span class="s"> </span><span class="s">is</span><span class="s"> </span><span class="s">not</span><span class="s"> </span><span class="s">null</span><span class="s">,</span><span class="s"> </span><span class="s">and</span><span class="s"> </span><span class="s">neither</span><span class="s"> </span><span class="s">are</span><span class="s"> </span><span class="s">any</span><span class="s"> </span><span class="s">of</span><span class="s"> </span><span class="s">it&#39;s</span><span class="s"> </span><span class="s">fields</span><span class="s"> </span><span class="s">or</span><span class="s"> </span><span class="s">properties</span><span class="s">.</span><span class="s">&quot;</span>
+| <span onmouseout="hideTip(event, 'fs9', 10)" onmouseover="showTip(event, 'fs9', 10)" class="i">None</span> <span class="k">-&gt;</span>
+    <span class="s">&quot;</span><span class="s">This</span><span class="s"> </span><span class="s">will</span><span class="s"> </span><span class="s">never</span><span class="s"> </span><span class="s">get</span><span class="s"> </span><span class="s">called</span><span class="s">.</span><span class="s">&quot;</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs10', 11)" onmouseover="showTip(event, 'fs10', 11)" class="i">nastyThing</span> <span class="o">=</span> <span class="k">null</span>
+
+<span class="k">if</span> <span onmouseout="hideTip(event, 'fs11', 12)" onmouseover="showTip(event, 'fs11', 12)" class="i">HasNoNulls</span> <span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="i">nastyThing</span> <span class="k">then</span>
+    <span class="s">&quot;</span><span class="s">This</span><span class="s"> </span><span class="s">would</span><span class="s"> </span><span class="s">be</span><span class="s"> </span><span class="s">nice</span><span class="s">,</span><span class="s"> </span><span class="s">but</span><span class="s">.</span><span class="s">.</span><span class="s">.</span><span class="s">&quot;</span>
+<span class="k">else</span>
+    <span class="s">&quot;</span><span class="s">nastyThing</span><span class="s"> </span><span class="s">is</span><span class="s"> </span><span class="s">null</span><span class="s">,</span><span class="s"> </span><span class="s">so</span><span class="s"> </span><span class="s">you&#39;ll</span><span class="s"> </span><span class="s">run</span><span class="s"> </span><span class="s">this</span><span class="s"> </span><span class="s">path</span><span class="s">.</span><span class="s">&quot;</span>
+
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs12', 14)" onmouseover="showTip(event, 'fs12', 14)" class="i">NoGoodClass</span> () <span class="o">=</span>
+    [&lt;<span onmouseout="hideTip(event, 'fs13', 15)" onmouseover="showTip(event, 'fs13', 15)" class="i">DefaultValue</span>&gt;] <span class="k">val</span> <span class="k">mutable</span> <span onmouseout="hideTip(event, 'fs14', 16)" onmouseover="showTip(event, 'fs14', 16)" class="i">Field</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs3', 17)" onmouseover="showTip(event, 'fs3', 17)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 18)" onmouseover="showTip(event, 'fs4', 18)" class="i">DateTime</span>
+    <span class="k">member</span> <span class="k">val</span> <span class="i">Prop1</span> <span class="o">=</span> <span class="k">null</span> <span class="k">with</span> <span class="i">get</span>, <span onmouseout="hideTip(event, 'fs15', 19)" onmouseover="showTip(event, 'fs15', 19)" class="i">set</span>
+
+<span class="k">match</span> <span onmouseout="hideTip(event, 'fs6', 20)" onmouseover="showTip(event, 'fs6', 20)" class="i">Check</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs12', 21)" onmouseover="showTip(event, 'fs12', 21)" class="i">NoGoodClass</span> () <span class="k">with</span>
+| <span onmouseout="hideTip(event, 'fs7', 22)" onmouseover="showTip(event, 'fs7', 22)" class="i">Some</span> <span onmouseout="hideTip(event, 'fs16', 23)" onmouseover="showTip(event, 'fs16', 23)" class="i">ngc</span> <span class="k">-&gt;</span>
+    <span class="s">&quot;</span><span class="s">Won&#39;t</span><span class="s"> </span><span class="s">get</span><span class="s"> </span><span class="s">here</span><span class="s">,</span><span class="s"> </span><span class="s">as</span><span class="s"> </span><span class="s">there</span><span class="s"> </span><span class="s">are</span><span class="s"> </span><span class="s">nasty</span><span class="s"> </span><span class="s">nulls</span><span class="s"> </span><span class="s">lurking</span><span class="s">.</span><span class="s">&quot;</span>
+| <span onmouseout="hideTip(event, 'fs9', 24)" onmouseover="showTip(event, 'fs9', 24)" class="i">None</span> <span class="k">-&gt;</span>
+    <span class="s">&quot;</span><span class="s">We&#39;ll</span><span class="s"> </span><span class="s">get</span><span class="s"> </span><span class="s">this</span><span class="s"> </span><span class="s">instead</span><span class="s">.</span><span class="s">&quot;</span>
+
+<span class="k">match</span> <span onmouseout="hideTip(event, 'fs6', 25)" onmouseover="showTip(event, 'fs6', 25)" class="i">Check</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs12', 26)" onmouseover="showTip(event, 'fs12', 26)" class="i">NoGoodClass</span>(<span class="i">Field</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 27)" onmouseover="showTip(event, 'fs3', 27)" class="i">System</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs4', 28)" onmouseover="showTip(event, 'fs4', 28)" class="i">DateTime</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 29)" onmouseover="showTip(event, 'fs5', 29)" class="i">Now</span>, <span class="i">Prop1</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">Hello</span><span class="s"> </span><span class="s">world</span><span class="s">&quot;</span>) <span class="k">with</span>
+| <span onmouseout="hideTip(event, 'fs7', 30)" onmouseover="showTip(event, 'fs7', 30)" class="i">Some</span> <span onmouseout="hideTip(event, 'fs16', 31)" onmouseover="showTip(event, 'fs16', 31)" class="i">ngc</span> <span class="k">-&gt;</span>
+    <span class="s">&quot;</span><span class="s">All</span><span class="s"> </span><span class="s">set</span><span class="s"> </span><span class="s">up</span><span class="s"> </span><span class="s">this</span><span class="s"> </span><span class="s">time</span><span class="s">.</span><span class="s">&quot;</span>
+| <span onmouseout="hideTip(event, 'fs9', 32)" onmouseover="showTip(event, 'fs9', 32)" class="i">None</span> <span class="k">-&gt;</span>
+    <span class="s">&quot;</span><span class="s">We</span><span class="s"> </span><span class="s">only</span><span class="s"> </span><span class="s">have</span><span class="s"> </span><span class="s">to</span><span class="s"> </span><span class="s">worry</span><span class="s"> </span><span class="s">about</span><span class="s"> </span><span class="s">nulls</span><span class="s"> </span><span class="s">on</span><span class="s"> </span><span class="s">this</span><span class="s"> </span><span class="s">route</span><span class="s">.</span><span class="s">&quot;</span></pre>
+</td>
+</tr>
+</table>
+
+<h2>Contributing and copyright</h2>
+
+<p>The project is hosted on <a href="https://github.com/mavnn/NullKill">GitHub</a> where you can <a href="https://github.com/mavnn/NullKill/issues">report issues</a>, fork 
+the project and submit pull requests. If you're adding new public API, please also 
+consider adding <a href="https://github.com/mavnn/NullKill/tree/master/docs/content">samples</a> that can be turned into a documentation. You might
+also want to read <a href="https://github.com/mavnn/NullKill/blob/master/README.md">library design notes</a> to understand how it works.</p>
+
+<p>The library is available under Public Domain license, which allows modification and 
+redistribution for both commercial and non-commercial purposes. For more information see the 
+<a href="https://github.com/mavnn/NullKill/blob/master/LICENSE.txt">License file</a> in the GitHub repository.</p>
+
+<div class="tip" id="fs1">module NullKill</div>
+<div class="tip" id="fs2">val myThing : System.DateTime<br /><br />Full name: Index.myThing</div>
+<div class="tip" id="fs3">namespace System</div>
+<div class="tip" id="fs4">Multiple items<br />type DateTime =<br />&#160;&#160;struct<br />&#160;&#160;&#160;&#160;new : ticks:int64 -&gt; DateTime + 10 overloads<br />&#160;&#160;&#160;&#160;member Add : value:TimeSpan -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddDays : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddHours : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMilliseconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMinutes : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddMonths : months:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddSeconds : value:float -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddTicks : value:int64 -&gt; DateTime<br />&#160;&#160;&#160;&#160;member AddYears : value:int -&gt; DateTime<br />&#160;&#160;&#160;&#160;...<br />&#160;&#160;end<br /><br />Full name: System.DateTime<br /><br />--------------------<br />System.DateTime()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(ticks: int64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(ticks: int64, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, calendar: System.Globalization.Calendar) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: System.Globalization.Calendar) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />System.DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, kind: System.DateTimeKind) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
+<div class="tip" id="fs5">property System.DateTime.Now: System.DateTime</div>
+<div class="tip" id="fs6">val Check : thing:&#39;a -&gt; &#39;a option<br /><br />Full name: NullKill.Check</div>
+<div class="tip" id="fs7">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs8">val thing : System.DateTime</div>
+<div class="tip" id="fs9">union case Option.None: Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs10">val nastyThing : &#39;a (requires &#39;a : null)<br /><br />Full name: Index.nastyThing</div>
+<div class="tip" id="fs11">val HasNoNulls : thing:obj -&gt; bool<br /><br />Full name: NullKill.HasNoNulls</div>
+<div class="tip" id="fs12">Multiple items<br />type NoGoodClass =<br />&#160;&#160;new : unit -&gt; NoGoodClass<br />&#160;&#160;val mutable Field: DateTime<br />&#160;&#160;member Prop1 : string<br />&#160;&#160;member Prop1 : string with set<br /><br />Full name: Index.NoGoodClass<br /><br />--------------------<br />new : unit -&gt; NoGoodClass</div>
+<div class="tip" id="fs13">Multiple items<br />type DefaultValueAttribute =<br />&#160;&#160;inherit Attribute<br />&#160;&#160;new : unit -&gt; DefaultValueAttribute<br />&#160;&#160;new : check:bool -&gt; DefaultValueAttribute<br />&#160;&#160;member Check : bool<br /><br />Full name: Microsoft.FSharp.Core.DefaultValueAttribute<br /><br />--------------------<br />new : unit -&gt; DefaultValueAttribute<br />new : check:bool -&gt; DefaultValueAttribute</div>
+<div class="tip" id="fs14">NoGoodClass.Field: System.DateTime</div>
+<div class="tip" id="fs15">val set : elements:seq&lt;&#39;T&gt; -&gt; Set&lt;&#39;T&gt; (requires comparison)<br /><br />Full name: Microsoft.FSharp.Core.ExtraTopLevelOperators.set</div>
+<div class="tip" id="fs16">val ngc : NoGoodClass</div>
+
+        </div>
+        <div class="span3">
+          <img src="/NullKill/img/logo.png" alt="F# Project" style="width:150px;margin:10px" />  
+          <ul class="nav nav-list" id="menu" style="margin-top: 20px;">
+            <li class="nav-header">NullKill</li>
+            <li><a href="/NullKill/index.html">Home page</a></li>
+            <li class="divider"></li>
+            <li><a href="http://nuget.com/packages/NullKill">Get Library via NuGet</a></li>
+            <li><a href="http://github.com/mavnn/NullKill">Source Code on GitHub</a></li>
+            <li><a href="http://github.com/mavnn/NullKill/blob/master/LICENSE.txt">License</a></li>
+            <li><a href="http://github.com/mavnn/NullKill/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+            
+            <li class="nav-header">Documentation</li>
+            <li><a href="/NullKill/reference/index.html">API Reference</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <a href="http://github.com/mavnn/NullKill"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"/></a>
+  </body>
+  </html>

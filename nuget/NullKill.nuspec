@@ -6,8 +6,8 @@
     <authors>@authors@</authors>
     <owners>@authors@</owners>
     <licenseUrl>http://github.com/mavnn/NullKill/blob/master/LICENSE.txt</licenseUrl>
-    <projectUrl>http://fsprojects.github.com/FSharp.ProjectScaffold</projectUrl>
-    <iconUrl>https://raw.github.com/fsharp/FSharp.ProjectScaffold/master/nuget/logo.png</iconUrl>
+    <projectUrl>http://blog.mavnn.co.uk/NullKill/</projectUrl>
+    <iconUrl>http://blog.mavnn.co.uk/NullKill/img/logo.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>@summary@</summary>
     <description>@description@</description>

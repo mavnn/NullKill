@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -78,6 +78,11 @@
     <ProjectReference Include="..\..\src\NullKill\NullKill.fsproj">
       <Name>NullKill</Name>
       <Project>{7e90d6ce-a10b-4858-a5bc-41df7250cbca}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\CSharp.TestTypes\CSharp.TestTypes.csproj">
+      <Name>CSharp.TestTypes</Name>
+      <Project>{5754edf4-6248-40ad-8782-8ff31a72c8b9}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

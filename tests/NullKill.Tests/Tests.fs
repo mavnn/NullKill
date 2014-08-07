@@ -72,3 +72,19 @@ let ``Test Recursing down works if all set`` () =
 [<Test>]
 let ``None should not count as a null`` () =
     Assert.IsTrue(HasNoNulls None, "None is not null, whatever the compiler thinks")
+
+[<Test>]
+let ``Null nullables is okay`` () =
+    let t = WithNullable()
+    t.NullableInt <- System.Nullable()
+    Assert.IsTrue(HasNoNulls t)
+
+[<Test>]
+let ``Indexed properties should have all values checked`` () =
+    let t = WithIndexedProperty(false)
+    Assert.IsFalse(HasNoNulls t)
+
+[<Test>]
+let ``Indexed properties should pass if all items complete`` () =
+    let t = WithIndexedProperty(true)
+    Assert.IsTrue(HasNoNulls t)

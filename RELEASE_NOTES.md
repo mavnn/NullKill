@@ -1,3 +1,7 @@
+#### 1.0.0.0 - August 7 2014
+* Handle indexed properties
+* Handle IEnumerables
+
 #### 0.10.0.0 - August 7 2014
 * Handle option types
 * Handle types with no properties/fields (oops)

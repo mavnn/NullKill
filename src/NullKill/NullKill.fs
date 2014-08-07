@@ -1,18 +1,30 @@
 module NullKill
 
 open System.Reflection
+open System.Collections.Generic
 open Microsoft.FSharp.Reflection
 
-let rec CheckField thing (field : FieldInfo) =
+let rec CheckEnumerable thing =
+    let e = box thing :?> System.Collections.IEnumerable
+    let typed =
+        e
+        |> Seq.cast
+    if Seq.length typed > 0 then
+        typed
+        |> Seq.map (fun i -> HasNoNulls' i <| i.GetType())
+        |> Seq.reduce (&&)
+    else
+        true
+
+and CheckField thing (field : FieldInfo) =
     if field.FieldType.IsValueType then
         true
     else
-        let o = field.GetValue()
+        let o = field.GetValue(thing)
         let t = field.FieldType
         HasNoNulls' o t
         
-and CheckFields thing =
-    let t = thing.GetType()
+and CheckFields thing (t : System.Type) =
     if t.IsValueType then
         true
     else
@@ -25,15 +37,19 @@ and CheckFields thing =
             |> Array.reduce (&&)
 
 and CheckProperty thing (prop : PropertyInfo) =
-    if prop.PropertyType.IsValueType then
+    if prop.PropertyType.IsValueType || prop.GetIndexParameters().Length > 0 then
         true
     else
+        let filter = TypeFilter(fun t _ -> t = typeof<System.Collections.IEnumerable>)
+        let enumerables = prop.PropertyType.FindInterfaces(filter, null)
         let o = prop.GetValue(thing, null)
-        let t = prop.GetType()
-        HasNoNulls' o t
+        let t = prop.PropertyType
+        if enumerables.Length > 0 then
+            HasNoNulls' o t && (CheckEnumerable o)
+        else
+            HasNoNulls' o t
 
-and CheckProperties thing =
-    let t = thing.GetType()
+and CheckProperties thing (t : System.Type) =
     if t.IsValueType then
         true
     else
@@ -52,7 +68,7 @@ and private HasNoNulls' (thing : obj) thingType =
         else
             false
     else
-        CheckProperties thing && CheckFields thing
+        CheckProperties thing thingType && CheckFields thing thingType
 
 let HasNoNulls<'a> (thing : 'a) =
     HasNoNulls' thing (typedefof<'a>)

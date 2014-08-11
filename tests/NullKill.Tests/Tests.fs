@@ -88,3 +88,12 @@ let ``Indexed properties should have all values checked`` () =
 let ``Indexed properties should pass if all items complete`` () =
     let t = WithIndexedProperty(true)
     Assert.IsTrue(HasNoNulls t)
+
+[<Test>]
+let ``Strings work`` () =
+    Assert.IsTrue(HasNoNulls "Bob")
+
+[<Test>]
+let ``Recursive data types don't overflow`` () =
+    let f = IO.FileInfo("NotOnThisDisk")
+    Assert.IsFalse(HasNoNulls f)

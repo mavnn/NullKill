@@ -1,3 +1,7 @@
+#### 1.1.0.0 - August 7 2014
+* Handle recursive data types
+* With special casing for strings
+
 #### 1.0.0.0 - August 7 2014
 * Handle indexed properties
 * Handle IEnumerables

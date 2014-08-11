@@ -4,6 +4,7 @@ open System
 open NullKill
 open CSharp.TestTypes
 open NUnit.Framework
+open FsCheck
 
 type Testable() =
     [<DefaultValue>] val mutable Field1 : System.DateTime
@@ -90,10 +91,65 @@ let ``Indexed properties should pass if all items complete`` () =
     Assert.IsTrue(HasNoNulls t)
 
 [<Test>]
-let ``Strings work`` () =
-    Assert.IsTrue(HasNoNulls "Bob")
+let ``IEnumerables with nulls in should be detected`` () =
+    let t = System.Collections.Generic.List<obj>()
+    t.Add(box null)
+    Assert.IsFalse(HasNoNulls t)
 
 [<Test>]
 let ``Recursive data types don't overflow`` () =
     let f = IO.FileInfo("NotOnThisDisk")
     Assert.IsFalse(HasNoNulls f)
+
+[<Test>]
+let ``Common data types: String`` () =
+    let test =
+        fun (str : string) ->
+            if str = null then
+                not <| HasNoNulls str
+            else
+                HasNoNulls str
+    Check.QuickThrowOnFailure test
+
+[<Test>]
+let ``Common data types: DateTime`` () =
+    let test =
+        fun (dt : DateTime) ->
+            HasNoNulls dt
+    Check.QuickThrowOnFailure test
+
+[<Test>]
+let ``Common data types: Guid`` () =
+    let test =
+        fun (g : Guid) ->
+            HasNoNulls g
+    Check.QuickThrowOnFailure test
+
+[<Test>]
+let ``Common data types: Boolean`` () =
+    Assert.IsTrue(HasNoNulls <| true)
+    Assert.IsTrue(HasNoNulls <| false)
+
+[<Test>]
+let ``Common data types: C# List`` () =
+    let test =
+        fun (g : System.Collections.Generic.List<_>) ->
+            HasNoNulls g = (g |> Seq.map HasNoNulls |> Seq.fold (&&) true)
+    Check.QuickThrowOnFailure test
+
+[<Test>]
+let ``Lists of lists are checked for nulls`` () =
+    let l = System.Collections.Generic.List<string>()
+    l.Add (null)
+    let p = System.Collections.Generic.List<_>()
+    p.Add (l)
+    Assert.IsFalse <| HasNoNulls p
+
+[<Test>]
+let ``Lists of lists are passed without nulls`` () =
+    let l = System.Collections.Generic.List<string>()
+    l.Add "Bob"
+    let p = System.Collections.Generic.List<_>()
+    p.Add l
+    Assert.IsTrue <| HasNoNulls p
+        

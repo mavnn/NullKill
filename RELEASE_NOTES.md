@@ -1,4 +1,7 @@
-#### 1.1.0.0 - August 7 2014
+#### 1.2.0.0 - August 11 2014
+* Better IEnumerable support
+
+#### 1.1.0.0 - August 11 2014
 * Handle recursive data types
 * With special casing for strings
 

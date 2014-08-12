@@ -1,3 +1,6 @@
+#### 1.2.1.0 - August 12 2014
+* Fix properties with generic parameters which are not generic
+
 #### 1.2.0.0 - August 11 2014
 * Better IEnumerable support
 

@@ -152,4 +152,18 @@ let ``Lists of lists are passed without nulls`` () =
     let p = System.Collections.Generic.List<_>()
     p.Add l
     Assert.IsTrue <| HasNoNulls p
+
+[<Test>]
+let ``Common data types: Arrays`` () =
+    let test =
+        fun (a : _ []) ->
+            HasNoNulls a = (a |> Array.map HasNoNulls |> Array.fold (&&) true)
+    Check.QuickThrowOnFailure test
+
+[<Test>]
+let ``Common data types: List`` () =
+    let test =
+        fun (a : _ list) ->
+            HasNoNulls a = (a |> List.map HasNoNulls |> List.fold (&&) true)
+    Check.QuickThrowOnFailure test
         

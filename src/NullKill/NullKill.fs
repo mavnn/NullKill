@@ -1,6 +1,5 @@
 module NullKill
 
-open System
 open System.Reflection
 open Microsoft.FSharp.Reflection
 
@@ -70,15 +69,28 @@ and private CheckProperty depth thing (prop : PropertyInfo) =
     if prop.PropertyType.IsValueType || prop.GetIndexParameters().Length > 0 then
         true
     else
-        let o = prop.GetValue(thing, null)
-        let t = prop.PropertyType
-        HasNoNulls' (depth + 1) o t
+        let get = prop.GetGetMethod()
+        if get.ContainsGenericParameters && (not get.IsGenericMethod) then
+            true
+        else
+            let o =
+                if get.IsGenericMethod then
+                    get
+                        .MakeGenericMethod(prop.PropertyType)
+                        .Invoke(thing, null)
+                else
+                    get.Invoke(thing, null)
+            let t = prop.PropertyType
+            HasNoNulls' (depth + 1) o t
 
 and private CheckProperties depth thing (t : System.Type) =
-    if t.IsValueType then
+    match t with
+    | _ when t.IsValueType ->
         true
-    else
-        match t.GetProperties () with
+    | _ ->
+        let checkableProps =
+            t.GetProperties (BindingFlags.Instance ||| BindingFlags.Public)
+        match checkableProps with
         | f when Array.empty = f ->
             true
         | fields ->

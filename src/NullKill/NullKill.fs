@@ -1,7 +1,29 @@
 module NullKill
 
+open System
 open System.Reflection
 open Microsoft.FSharp.Reflection
+open Microsoft.FSharp.Quotations
+open Microsoft.FSharp.Linq.RuntimeHelpers.LeafExpressionConverter
+
+let private core =
+    AppDomain.CurrentDomain.GetAssemblies()
+    |> Seq.find (fun a -> a.GetName().Name = "FSharp.Core")
+
+let private seqMod =
+    core.GetTypes()
+    |> Seq.filter FSharpType.IsModule
+    |> Seq.find (fun t -> t.FullName = "Microsoft.FSharp.Collections.SeqModule")
+
+let private map eType =
+    let openMap =
+        seqMod.GetMethod("Map")
+    openMap.MakeGenericMethod [|eType;typeof<bool>|]
+
+let private cast eType =
+    let openCast =
+        seqMod.GetMethod("Cast")
+    openCast.MakeGenericMethod [|eType|]
 
 let rec private CheckEnumerable depth thing =
     let e = box thing :?> System.Collections.IEnumerable
@@ -17,33 +39,19 @@ let rec private CheckEnumerable depth thing =
 
 and private CheckGEnumerable (eType : System.Type) depth thing =
     let genType = eType.GetGenericArguments().[0]
-    if genType.FullName = null && genType.Name = "T" then
-        CheckEnumerable depth thing
-    else
-        let getEnumerator =
-            eType
-                .GetMethod("GetEnumerator")
-        let enumerator =
-            match getEnumerator.IsGenericMethodDefinition with
-            | true ->
-                getEnumerator.MakeGenericMethod(genType).Invoke(thing, null)
-            | false ->
-                getEnumerator.Invoke(thing, null)
-        let moveNext =
-            enumerator
-                .GetType()
-                .GetMethod("MoveNext")
-        let current =
-            enumerator.GetType().GetMethod("get_Current")
-        let rec iter list =
-            if moveNext.Invoke(enumerator, null) :?> bool then
-                iter <| current.Invoke(enumerator, null)::list
-            else
-                list        
-        let objs = iter []
-        objs
-        |> List.map (fun o -> HasNoNulls' (depth + 1) o genType)
-        |> List.fold (&&) true
+    let genMap = map genType
+    let genCast = cast genType
+    let check = 
+        let o = Var("o", genType)
+        let var = Expr.Var(o)
+        let objVar = Expr.Coerce(var, typeof<obj>)
+        Expr.Lambda(o, <@@ HasNoNulls' (depth + 1) (%%objVar) genType @@>)
+        |> EvaluateQuotation
+    let castSeq =
+        genCast.Invoke(null, [|thing|])
+    let mappedSeq = genMap.Invoke(null, [|check;castSeq|]) :?> seq<bool>
+    mappedSeq
+    |> Seq.fold (&&) true
 
 and private CheckField depth thing (field : FieldInfo) =
     if field.FieldType.IsValueType then
@@ -65,23 +73,25 @@ and private CheckFields depth thing (t : System.Type) =
             |> Array.map (CheckField depth thing)
             |> Array.reduce (&&)
 
-and private CheckProperty depth thing (prop : PropertyInfo) =
-    if prop.PropertyType.IsValueType || prop.GetIndexParameters().Length > 0 then
+and private CheckProperty depth thing thingType (prop : PropertyInfo) =
+    if prop.PropertyType.IsValueType
+       || prop.GetIndexParameters().Length > 0 
+       || ((prop.Name = "Head" || prop.Name = "Tail" || prop.Name = "TailOrNull") && FSharpType.IsUnion thingType) then
         true
     else
         let get = prop.GetGetMethod()
-        if get.ContainsGenericParameters && (not get.IsGenericMethod) then
-            true
-        else
-            let o =
-                if get.IsGenericMethod then
-                    get
-                        .MakeGenericMethod(prop.PropertyType)
-                        .Invoke(thing, null)
+        let o =
+            if get.IsGenericMethod then
+                get
+                    .MakeGenericMethod(prop.PropertyType)
+                    .Invoke(thing, null)
+            else
+                if get.ReturnType.IsGenericParameter then
+                    get.Invoke(thing, null)
                 else
                     get.Invoke(thing, null)
-            let t = prop.PropertyType
-            HasNoNulls' (depth + 1) o t
+        let t = prop.PropertyType
+        HasNoNulls' (depth + 1) o t
 
 and private CheckProperties depth thing (t : System.Type) =
     match t with
@@ -89,13 +99,18 @@ and private CheckProperties depth thing (t : System.Type) =
         true
     | _ ->
         let checkableProps =
-            t.GetProperties (BindingFlags.Instance ||| BindingFlags.Public)
+            if FSharpType.IsRecord t then
+                FSharpType.GetRecordFields t
+            elif t.IsGenericType && t.GetGenericTypeDefinition() = [].GetType().GetGenericTypeDefinition() then
+                [||]
+            else
+                t.GetProperties (BindingFlags.Instance ||| BindingFlags.Public)
         match checkableProps with
-        | f when Array.empty = f ->
+        | p when Array.empty = p ->
             true
-        | fields ->
-            fields
-            |> Array.map (CheckProperty depth thing)
+        | properties ->
+            properties
+            |> Array.map (CheckProperty depth thing t)
             |> Array.reduce (&&)
 
 and private HasNoNulls' depth (thing : obj) thingType =
@@ -121,14 +136,17 @@ and private HasNoNulls' depth (thing : obj) thingType =
             true
         | _ ->
             if genumerables.Length > 0 then
-                CheckGEnumerable (Seq.head genumerables) depth thing && CheckProperties depth thing thingType && CheckFields depth thing thingType
+                let enumerableChildrenNoNulls = CheckGEnumerable (Seq.head genumerables) depth thing
+                let propertiesNoNulls = CheckProperties depth thing thingType
+                let fieldsNoNulls = CheckFields depth thing thingType
+                enumerableChildrenNoNulls && propertiesNoNulls && fieldsNoNulls
             else if enumerables.Length > 0 then
                 CheckEnumerable depth thing && CheckProperties depth thing thingType && CheckFields depth thing thingType
             else
                 CheckProperties depth thing thingType && CheckFields depth thing thingType
 
 let HasNoNulls<'a> (thing : 'a) =
-    HasNoNulls' 0 thing (typedefof<'a>)
+    HasNoNulls' 0 thing (typeof<'a>)
 
 let Check thing =
     if HasNoNulls thing then

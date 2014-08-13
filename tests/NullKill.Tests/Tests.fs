@@ -166,4 +166,17 @@ let ``Common data types: List`` () =
         fun (a : _ list) ->
             HasNoNulls a = (a |> List.map HasNoNulls |> List.fold (&&) true)
     Check.QuickThrowOnFailure test
+
+[<Test>]
+let ``Empty List is not null`` () =
+    Assert.IsTrue(HasNoNulls [])
+
+type RecordWithGeneric<'a> = { GenericThing : 'a }
         
+[<Test>]
+let ``Record with generic properties`` () =
+    Assert.IsTrue (HasNoNulls { GenericThing = "Bob" })    
+        
+[<Test>]
+let ``Record with generic properties should detect nulls`` () =
+    Assert.IsFalse (HasNoNulls { GenericThing = null })    

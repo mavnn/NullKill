@@ -1,3 +1,7 @@
+#### 1.2.2.0 - August 12 2014
+* Even better IEnumerable handling
+* FSharpList special casing
+
 #### 1.2.1.0 - August 12 2014
 * Fix properties with generic parameters which are not generic
 

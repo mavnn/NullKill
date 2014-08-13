@@ -3,7 +3,5 @@ init:
 build_script:
   - cmd: build.cmd NuGet
 test: off
-version: {build}
-artifacts:
-  - path: bin
-    name: bin
+version:
+    {build}

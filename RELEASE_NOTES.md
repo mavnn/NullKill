@@ -1,3 +1,6 @@
+#### 1.2.2 - August 13 2014
+* Full CI build
+
 #### 1.2.2.0 - August 12 2014
 * Even better IEnumerable handling
 * FSharpList special casing

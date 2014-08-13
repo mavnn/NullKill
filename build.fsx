@@ -60,13 +60,21 @@ let gitName = "NullKill"
 // The url for the raw files hosted
 let gitRaw = environVarOrDefault "gitRaw" "https://raw.github.com/mavnn"
 
+let buildNumber =
+    environVarOrDefault "APPVEYOR_BUILD_NUMBER" "0"
+
 // --------------------------------------------------------------------------------------
 // END TODO: The rest of the file includes standard build steps 
 // --------------------------------------------------------------------------------------
 
 // Read additional information from the release notes document
 Environment.CurrentDirectory <- __SOURCE_DIRECTORY__
-let release = parseReleaseNotes (IO.File.ReadAllLines "RELEASE_NOTES.md")
+let release = 
+    let fromNotes = parseReleaseNotes (IO.File.ReadAllLines "RELEASE_NOTES.md")
+    { fromNotes with
+        AssemblyVersion = sprintf "%s.%s" fromNotes.AssemblyVersion buildNumber
+        NugetVersion = sprintf "%s.%s" fromNotes.NugetVersion buildNumber
+    }
 
 // Generate assembly info files with the right version & up-to-date information
 Target "AssemblyInfo" (fun _ ->

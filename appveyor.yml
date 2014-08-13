@@ -3,5 +3,3 @@ init:
 build_script:
   - cmd: build.cmd NuGet
 test: off
-version:
-    {build}

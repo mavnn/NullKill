@@ -180,3 +180,11 @@ let ``Record with generic properties`` () =
 [<Test>]
 let ``Record with generic properties should detect nulls`` () =
     Assert.IsFalse (HasNoNulls { GenericThing = null })    
+
+type TestEnum =
+    | CaseOne = 1
+    | CaseTwo = 2
+
+[<Test>]
+let ``Enum is not null`` () =
+    Assert.IsTrue (HasNoNulls TestEnum.CaseOne)

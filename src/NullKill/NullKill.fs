@@ -25,6 +25,14 @@ let private cast eType =
         seqMod.GetMethod("Cast")
     openCast.MakeGenericMethod [|eType|]
 
+let private genumFilter = 
+    TypeFilter(
+        fun t _ -> 
+            t.IsGenericType
+            && t.GetGenericTypeDefinition () = typeof<System.Collections.Generic.IEnumerable<_>>.GetGenericTypeDefinition())
+
+let private enumFilter = TypeFilter(fun t _ -> t = typeof<System.Collections.IEnumerable>)
+
 let rec private CheckEnumerable depth thing =
     let e = box thing :?> System.Collections.IEnumerable
     let typed =
@@ -123,24 +131,17 @@ and private HasNoNulls' depth (thing : obj) thingType =
         else
             false
     | _ ->
-        let genumFilter = 
-            TypeFilter(
-                fun t _ -> 
-                    t.IsGenericType
-                    && t.GetGenericTypeDefinition () = typeof<System.Collections.Generic.IEnumerable<_>>.GetGenericTypeDefinition())
-        let genumerables = thingType.FindInterfaces(genumFilter, null)
-        let enumFilter = TypeFilter(fun t _ -> t = typeof<System.Collections.IEnumerable>)
-        let enumerables = thingType.FindInterfaces(enumFilter, null)
         match thingType with
         | t when t = typeof<string> ->
             true
         | _ ->
+            let genumerables = thingType.FindInterfaces(genumFilter, null)
             if genumerables.Length > 0 then
                 let enumerableChildrenNoNulls = CheckGEnumerable (Seq.head genumerables) depth thing
                 let propertiesNoNulls = CheckProperties depth thing thingType
                 let fieldsNoNulls = CheckFields depth thing thingType
                 enumerableChildrenNoNulls && propertiesNoNulls && fieldsNoNulls
-            else if enumerables.Length > 0 then
+            else if Seq.length (thingType.FindInterfaces(enumFilter, null)) > 0 then
                 CheckEnumerable depth thing && CheckProperties depth thing thingType && CheckFields depth thing thingType
             else
                 CheckProperties depth thing thingType && CheckFields depth thing thingType

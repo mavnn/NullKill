@@ -1,3 +1,6 @@
+#### 1.2.3 - October 16 2014
+* Extra test, minor refactoring
+
 #### 1.2.2 - August 13 2014
 * Full CI build
 
